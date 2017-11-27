@@ -4,7 +4,7 @@
 // A simple chat server using Socket.IO, Express, and Async.
 //
 var http = require('http');
-var Promise = require("promise");
+var fs = require("fs");
 var utf8 = require('utf8');
 var parseString = require('xml2js').parseString;
 var builder = require('xmlbuilder');
@@ -57,22 +57,22 @@ var server = http.createServer(function(request, response) {
           var body = new Buffer(chunk, 'binary');
           var conv = new iconv.Iconv('windows-1251', 'utf8');
           var back = new iconv.Iconv('utf8', 'windows-1251');
-          console.log(conv.convert(body).toString());
+          var d = new Date();
+          fs.appendFileSync('log/' + d.getDate() + '.' + (d.getMonth()+1) + '.xml', conv.convert(body).toString());
+          
           var backBody = new Buffer(conv.convert(body), 'binary');
-          response.write(back.convert(conv.convert(body)));
+          //response.write(back.convert(conv.convert(body)));
           console.log(back.convert(conv.convert(body)));
-          console.log(back.convert(conv.convert(body)).toString());
+          console.log(builder.create(back.convert(conv.convert(body))));
+          //console.log(back.convert(conv.convert(body)).toString());
+          //
+          //
           
-          
-          var xml = back.convert(conv.convert(body)).toString();
-          parseString(xml, function (err, result) {
-              console.log(result);
-          });
           
         }else{
           console.log('BODY: ' + chunk);
-          response.write(chunk);
         }
+        response.write(chunk);
         response.end();
         //console.log('xml parser: ')
         //parseString(chunk, function (err, result) {
