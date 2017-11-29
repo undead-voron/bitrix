@@ -1,10 +1,6 @@
 var http = require('http');
 var fs = require("fs");
-var utf8 = require('utf8');
-var parseString = require('xml2js').parseString;
-var builder = require('xmlbuilder');
 var iconv = require("iconv");
-var MyBuffer = require('buffer').Buffer;
 
 
 var server = http.createServer(function(request, response) {
